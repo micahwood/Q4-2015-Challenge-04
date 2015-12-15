@@ -45,7 +45,10 @@ describe Bowling do
     proc { @game.roll('A') }.must_output "MARK IT ZERO!"
     proc { @game.roll([]) }.must_output "MARK IT ZERO!"
     proc { @game.roll(Object.new) }.must_output "MARK IT ZERO!"
-    (1..15).each { @game.roll(0) }
+  end
+
+  it "should follow through with it's threat to mark it zero" do
+    (1..20).each { @game.roll(20) }
     @game.score.must_equal 0
   end
 
@@ -54,7 +57,12 @@ describe Bowling do
   end
 
   it "can score a game full of people who are about to enter a world of pain" do
-    rolls = [-4, 'a', [], nil, 32, Object.new, Hash.new, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    rolls = [-4, 'a', [], nil, 32, Object.new, Hash.new, 20, 3.14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     @game.score(rolls).must_equal 0
+  end
+
+  it "won't calculate the score for a game if you aren't done bowling yet" do
+    (1..12).each { @game.roll(3) }
+    @game.score.must_equal "You aren't done bowling yet"
   end
 end
